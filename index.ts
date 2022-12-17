@@ -7,7 +7,7 @@ import _ from 'lodash'
  * @param allowMutations Are you allow to mutate original object
  * @returns Same object or array without null, undefined, NaN, empty (objects, arrays, maps and or sets)
  */
-export function cleanObject<T>(dirtyObject: object | Array<T>, allowMutations = false): T {
+export const cleanObject = <T>(dirtyObject: object | Array<T>, allowMutations = false): T => {
    const obj = allowMutations ? _.cloneDeep(dirtyObject) : dirtyObject
    const remover = (obj: any) => {
       for (const key in obj) {
@@ -36,8 +36,8 @@ export function cleanObject<T>(dirtyObject: object | Array<T>, allowMutations = 
  * @param str String with numbers separated by comma
  * @returns Array of numbers
  */
-export function numStringToArr(str: string): number[] {
-   return str.split(',').flatMap(num => {
+export const numStringToArr = (str: string): number[] => {
+   return str.split(',').flatMap((num) => {
       const number = Number(num)
       if (number) return number
       return []
@@ -48,7 +48,7 @@ export function numStringToArr(str: string): number[] {
  * @param array Array of numbers
  * @returns String with numbers separated by comma
  */
-export function numArrToString(array: number[] | undefined): string {
+export const numArrToString = (array: number[] | undefined): string => {
    if (array === undefined) return ''
    return array.join(', ')
 }
@@ -64,7 +64,7 @@ export function numArrToString(array: number[] | undefined): string {
  ** This will make
  ** [1, 2, 3]
  */
- export function customJsonStringify(object: object, properties: string[], spaces = 1) {
+export const customJsonStringify = (object: object, properties: string[], spaces = 1) => {
    const string = JSON.stringify(object, undefined, spaces)
    const regex = new RegExp(`"${properties.join('|')}"\\s*:\\s*\\[([^]+?)\\]`, 'g')
 
@@ -79,5 +79,50 @@ export function numArrToString(array: number[] | undefined): string {
    return newString
 }
 
-// todo: add index DB
-// todo: add fetch with automatic repeat on fail // call it persistentFetch
+export const persistentFetch = async (
+   url: RequestInfo | URL,
+   numberOfTries: number,
+   data: RequestInit | undefined = undefined,
+   r: number = 0
+): Promise<any> => {
+   const resp = await fetch(url, data)
+   if (resp.status === 200) return resp.json()
+   if (r >= numberOfTries) return
+   return persistentFetch(url, numberOfTries, data, r + 1)
+}
+
+export const simpleIDB = async (name: string, key: string, payload?: any) => {
+   return await new Promise((resolve) => {
+      const request = window.indexedDB.open(`${name}_db`)
+
+      request.onerror = (e) => {
+         console.error('IDB error')
+         console.error(e)
+      }
+
+      request.onupgradeneeded = () => {
+         const db = request.result
+         db.createObjectStore(`${name}_store`)
+      }
+
+      if (payload) {
+         request.onsuccess = () => {
+            const db = request.result
+            const transaction = db.transaction(`${name}_store`, 'readwrite')
+            const store = transaction.objectStore(`${name}_store`)
+            store.put(payload, key)
+         }
+      } else {
+         request.onsuccess = () => {
+            const db = request.result
+            const transaction = db.transaction(`${name}_store`, 'readwrite')
+            const store = transaction.objectStore(`${name}_store`)
+            const data = store.get(key)
+
+            data.onsuccess = () => {
+               resolve(data.result)
+            }
+         }
+      }
+   })
+}
