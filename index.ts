@@ -1,13 +1,6 @@
 import _ from 'lodash'
 
-/**
- ** Removes null, undefined, NaN, empty (objects, arrays, maps and or sets) from object or array
- ** Empty (...) means if any of specified in brackets is empty
- * @param dirtyObject Object or Array to clean
- * @param allowMutations Are you allow to mutate original object
- * @returns Same object or array without null, undefined, NaN, empty (objects, arrays, maps and or sets)
- */
-export const cleanObject = <T>(dirtyObject: object | Array<T>, allowMutations = false): T => {
+export function cleanObject<T>(dirtyObject: object | Array<T>, allowMutations = false): T {
    const obj = allowMutations ? _.cloneDeep(dirtyObject) : dirtyObject
    const remover = (obj: any) => {
       for (const key in obj) {
@@ -32,11 +25,7 @@ export const cleanObject = <T>(dirtyObject: object | Array<T>, allowMutations = 
    return remover(obj)
 }
 
-/**
- * @param str String with numbers separated by comma
- * @returns Array of numbers
- */
-export const numStringToArr = (str: string): number[] => {
+export function numStringToArr(str: string): number[] {
    return str.split(',').flatMap((num) => {
       const number = Number(num)
       if (number) return number
@@ -44,27 +33,12 @@ export const numStringToArr = (str: string): number[] => {
    })
 }
 
-/**
- * @param array Array of numbers
- * @returns String with numbers separated by comma
- */
-export const numArrToString = (array: number[] | undefined): string => {
+export function numArrToString(array: number[] | undefined): string {
    if (array === undefined) return ''
    return array.join(', ')
 }
 
-/**
- ** Instead of regular stringify this one doesn't add new lines to specified arrays
- ** Basically normal stringify would make
- ** [
- **   1,
- **   2,
- **   3
- ** ]
- ** This will make
- ** [1, 2, 3]
- */
-export const customJsonStringify = (object: object, properties: string[], spaces = 1) => {
+export function customJsonStringify(object: object, properties: string[], spaces = 1) {
    const string = JSON.stringify(object, undefined, spaces)
    const regex = new RegExp(`"${properties.join('|')}"\\s*:\\s*\\[([^]+?)\\]`, 'g')
 
@@ -79,19 +53,19 @@ export const customJsonStringify = (object: object, properties: string[], spaces
    return newString
 }
 
-export const persistentFetch = async (
+export async function persistentFetch(
    url: RequestInfo | URL,
    numberOfTries: number,
    data: RequestInit | undefined = undefined,
    r: number = 0
-): Promise<any> => {
+): Promise<any> {
    const resp = await fetch(url, data)
    if (resp.status === 200) return resp.json()
    if (r >= numberOfTries) return
    return persistentFetch(url, numberOfTries, data, r + 1)
 }
 
-export const simpleIDB = async (name: string, key: string, payload?: any) => {
+export async function simpleIDB(name: string, key: string, payload?: any) {
    return await new Promise((resolve) => {
       const request = window.indexedDB.open(`${name}_db`)
 

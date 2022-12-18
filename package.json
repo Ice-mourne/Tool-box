@@ -1,10 +1,10 @@
 {
   "name": "@icemourne/tool-box",
-  "version": "1.0.2",
+  "version": "1.0.4",
   "description": "Random TS functions",
-  "main": "index.ts",
+  "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "tsc"
   },
   "repository": {
     "type": "git",
@@ -21,6 +21,7 @@
   },
   "devDependencies": {
     "@types/lodash": "^4.14.191",
-    "@types/node": "^18.11.15"
+    "@types/node": "^18.11.15",
+    "typescript": "^4.9.4"
   }
 }
