@@ -4,7 +4,7 @@
   "description": "Random TS functions",
   "main": "index.js",
   "scripts": {
-    "build": "tsc"
+    "build": "tsc --declaration"
   },
   "repository": {
     "type": "git",

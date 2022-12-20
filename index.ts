@@ -1,6 +1,14 @@
 import _ from 'lodash'
+import { Manifest } from './bungieInterfaces/manifest'
 
-export function cleanObject<T>(dirtyObject: object | Array<T>, allowMutations = false): T {
+/**
+ ** Removes null, undefined, NaN, empty (objects, arrays, maps and or sets) from object or array
+ ** Empty (...) means if any of specified in brackets is empty
+ * @param { object | Array<T> } dirtyObject Object or Array to clean
+ * @param { boolean } allowMutations Are you allow to mutate original object
+ * @returns { T } Same object or array without null, undefined, NaN, empty (objects, arrays, maps and or sets)
+ */
+export function cleanObject<T>(dirtyObject: object | Array<T>, allowMutations: boolean = false): T {
    const obj = allowMutations ? _.cloneDeep(dirtyObject) : dirtyObject
    const remover = (obj: any) => {
       for (const key in obj) {
@@ -25,6 +33,10 @@ export function cleanObject<T>(dirtyObject: object | Array<T>, allowMutations = 
    return remover(obj)
 }
 
+/**
+ * @param { string } str String with numbers separated by comma
+ * @returns { number[] } Array of numbers
+ */
 export function numStringToArr(str: string): number[] {
    return str.split(',').flatMap((num) => {
       const number = Number(num)
@@ -33,11 +45,26 @@ export function numStringToArr(str: string): number[] {
    })
 }
 
+/**
+ * @param { number[] } array Array of numbers
+ * @returns { string } String with numbers separated by comma
+ */
 export function numArrToString(array: number[] | undefined): string {
    if (array === undefined) return ''
    return array.join(', ')
 }
 
+/**
+ ** Instead of regular stringify this one doesn't add new lines to specified arrays
+ ** Basically normal stringify would make
+ ** [
+ **   1,
+ **   2,
+ **   3
+ ** ]
+ ** This will make
+ ** [1, 2, 3]
+ */
 export function customJsonStringify(object: object, properties: string[], spaces = 1) {
    const string = JSON.stringify(object, undefined, spaces)
    const regex = new RegExp(`"${properties.join('|')}"\\s*:\\s*\\[([^]+?)\\]`, 'g')
@@ -53,6 +80,12 @@ export function customJsonStringify(object: object, properties: string[], spaces
    return newString
 }
 
+/**
+ * @param { RequestInfo | URL } url URL to fetch
+ * @param { number } numberOfTries Number of tries to fetch
+ * @param { RequestInit } data Data to send
+ * @returns { Promise<any> } Fetched data in JSON format
+ */
 export async function persistentFetch(
    url: RequestInfo | URL,
    numberOfTries: number,
@@ -65,6 +98,12 @@ export async function persistentFetch(
    return persistentFetch(url, numberOfTries, data, r + 1)
 }
 
+/**
+ * @param { string } name Name of the database
+ * @param { string } key Key to store data under
+ * @param payload Data to store
+ * @returns Stored data
+ */
 export async function simpleIDB(name: string, key: string, payload?: any) {
    return await new Promise((resolve) => {
       const request = window.indexedDB.open(`${name}_db`)
@@ -99,4 +138,23 @@ export async function simpleIDB(name: string, key: string, payload?: any) {
          }
       }
    })
+}
+
+type Locations = keyof Manifest
+
+export async function fetchBungieManifest(locations: Locations[], language: string = 'en') {
+   const json = await persistentFetch('https://www.bungie.net/Platform/Destiny2/Manifest/', 3)
+   const manifest = json.Response.jsonWorldComponentContentPaths[language]
+   const manifestVersion = json.Response.version
+
+   let data: Manifest = {
+      version: manifestVersion,
+   }
+
+   locations.forEach(async (location) => {
+      const fixedLocation = `Destiny${location.charAt(0).toUpperCase() + location.slice(1)}Definition` as Locations
+      data[location] = await persistentFetch(`https://www.bungie.net${manifest[fixedLocation]}`, 3)
+   })
+
+   return data
 }
