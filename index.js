@@ -33,10 +33,10 @@ function cleanObject(dirtyObject, allowMutations = false) {
             // Remove empty objects, arrays, maps and sets
             if (lodash_1.default.isEmpty(obj[key]))
                 delete obj[key];
-            // Deleting properties from array makes them undefined this will remove undefined values from array
-            if (Array.isArray(obj))
-                obj = lodash_1.default.pull(obj, undefined);
         }
+        // Deleting properties from array makes them undefined this will remove undefined values from array
+        if (Array.isArray(obj))
+            return lodash_1.default.pull(obj, undefined);
         return obj;
     };
     return remover(obj);

@@ -26,9 +26,9 @@ export function cleanObject<T>(dirtyObject: T, allowMutations: boolean = false):
          remover(obj[key])
          // Remove empty objects, arrays, maps and sets
          if (_.isEmpty(obj[key])) delete obj[key]
-         // Deleting properties from array makes them undefined this will remove undefined values from array
-         if (Array.isArray(obj)) obj = _.pull(obj, undefined)
       }
+      // Deleting properties from array makes them undefined this will remove undefined values from array
+      if (Array.isArray(obj)) return _.pull(obj, undefined)
       return obj
    }
    return remover(obj)
