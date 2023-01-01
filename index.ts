@@ -1,6 +1,5 @@
 import _ from 'lodash'
 import { Manifest, InventoryItems, PlugSets, SocketTypes, Stats } from './bungieInterfaces/manifest'
-
 export { Manifest, InventoryItems, PlugSets, SocketTypes, Stats }
 
 /**
@@ -56,6 +55,7 @@ export function numArrToString(array: number[] | undefined): string {
    return array.join(', ')
 }
 
+type StingilyProperties = 'stat' | 'multiplier' | 'weaponTypes' | 'classNames' | string
 /**
  ** Instead of regular stringify this one doesn't add new lines to specified arrays
  ** Basically normal stringify would make
@@ -67,11 +67,11 @@ export function numArrToString(array: number[] | undefined): string {
  ** This will make
  ** [1, 2, 3]
  */
-export function customJsonStringify(object: object, properties: string[], spaces = 1) {
+export function customJsonStringify(object: object, properties: StingilyProperties[], spaces = 1) {
    const string = JSON.stringify(object, undefined, spaces)
-   const regex = new RegExp(`"${properties.join('|')}"\\s*:\\s*\\[([^]+?)\\]`, 'g')
+   const regex = new RegExp(`"(${properties.join('|')})"\\s*:\\s*\\[([^]+?)\\]`, 'g')
 
-   const matches = string.match(regex) // /"(stat|multiplier|weaponTypes)": \[[^]+?\]/g
+   const matches = string.match(regex)
    if (matches === null) return string
 
    const newString = matches.reduce((acc, match) => {

@@ -18,6 +18,7 @@ export declare function numStringToArr(str: string): number[];
  * @returns { string } String with numbers separated by comma
  */
 export declare function numArrToString(array: number[] | undefined): string;
+type StingilyProperties = 'stat' | 'multiplier' | 'weaponTypes' | 'classNames' | string;
 /**
  ** Instead of regular stringify this one doesn't add new lines to specified arrays
  ** Basically normal stringify would make
@@ -29,7 +30,7 @@ export declare function numArrToString(array: number[] | undefined): string;
  ** This will make
  ** [1, 2, 3]
  */
-export declare function customJsonStringify(object: object, properties: string[], spaces?: number): string;
+export declare function customJsonStringify(object: object, properties: StingilyProperties[], spaces?: number): string;
 /**
  * @param { RequestInfo | URL } url URL to fetch
  * @param { number } numberOfTries Number of tries to fetch
