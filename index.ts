@@ -1,14 +1,16 @@
 import _ from 'lodash'
-import { Manifest } from './bungieInterfaces/manifest'
+import { Manifest, InventoryItems, PlugSets, SocketTypes, Stats } from './bungieInterfaces/manifest'
+
+export { Manifest, InventoryItems, PlugSets, SocketTypes, Stats }
 
 /**
  ** Removes null, undefined, NaN, empty (objects, arrays, maps and or sets) from object or array
  ** Empty (...) means if any of specified in brackets is empty
  * @param { object | Array<T> } dirtyObject Object or Array to clean
- * @param { boolean } allowMutations Are you allow to mutate original object
+ * @param { boolean } allowMutations Can object be mutated default false
  * @returns { T } Same object or array without null, undefined, NaN, empty (objects, arrays, maps and or sets)
  */
-export function cleanObject<T>(dirtyObject: object | Array<T>, allowMutations: boolean = false): T {
+export function cleanObject<T>(dirtyObject: T, allowMutations: boolean = false): T {
    const obj = allowMutations ? _.cloneDeep(dirtyObject) : dirtyObject
    const remover = (obj: any) => {
       for (const key in obj) {
@@ -151,10 +153,11 @@ export async function fetchBungieManifest(locations: Locations[], language: stri
       version: manifestVersion,
    }
 
-   locations.forEach(async (location) => {
-      const fixedLocation = `Destiny${location.charAt(0).toUpperCase() + location.slice(1)}Definition` as Locations
+   for (let i = 0; i < locations.length; i++) {
+      const location = locations[i];
+      const fixedLocation = `Destiny${_.upperFirst(location)}Definition` as Locations
       data[location] = await persistentFetch(`https://www.bungie.net${manifest[fixedLocation]}`, 3)
-   })
+   }
 
    return data
 }

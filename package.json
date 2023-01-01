@@ -1,6 +1,9 @@
 {
   "name": "@icemourne/tool-box",
-  "version": "1.0.5",
+  "author": "Icemourne",
+  "license": "MIT",
+  "homepage": "https://github.com/Ice-mourne/Tool-box#readme",
+  "version": "1.0.9",
   "description": "Random TS functions",
   "main": "index.js",
   "scripts": {
@@ -10,12 +13,9 @@
     "type": "git",
     "url": "git+https://github.com/Ice-mourne/Tool-box.git"
   },
-  "author": "Icemourne",
-  "license": "MIT",
   "bugs": {
     "url": "https://github.com/Ice-mourne/Tool-box/issues"
   },
-  "homepage": "https://github.com/Ice-mourne/Tool-box#readme",
   "dependencies": {
     "lodash": "^4.17.21"
   },

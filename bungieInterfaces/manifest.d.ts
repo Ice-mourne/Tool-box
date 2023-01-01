@@ -1,7 +1,7 @@
-import { InventoryItem } from "./inventoryItem";
-import { PlugSet } from "./plugSet";
-import { SocketType } from "./socketType";
-import { Stat } from "./stat";
+import { InventoryItem } from './inventoryItem'
+import { PlugSet } from './plugSet'
+import { SocketType } from './socketType'
+import { Stat } from './stat'
 
 export interface InventoryItems {
    [key: string]: InventoryItem
@@ -20,9 +20,9 @@ export interface Stats {
 }
 
 export interface Manifest {
-   version:         string
-   inventoryItems?: InventoryItems
-   plugSets?:       PlugSets
-   socketTypes?:    SocketTypes
-   stats?:          Stats
+   version: string
+   inventoryItem?: InventoryItems
+   plugSet?: PlugSets
+   socketType?: SocketTypes
+   stat?: Stats
 }

@@ -1,12 +1,13 @@
-import { Manifest } from './bungieInterfaces/manifest';
+import { Manifest, InventoryItems, PlugSets, SocketTypes, Stats } from './bungieInterfaces/manifest';
+export { Manifest, InventoryItems, PlugSets, SocketTypes, Stats };
 /**
  ** Removes null, undefined, NaN, empty (objects, arrays, maps and or sets) from object or array
  ** Empty (...) means if any of specified in brackets is empty
  * @param { object | Array<T> } dirtyObject Object or Array to clean
- * @param { boolean } allowMutations Are you allow to mutate original object
+ * @param { boolean } allowMutations Can object be mutated default false
  * @returns { T } Same object or array without null, undefined, NaN, empty (objects, arrays, maps and or sets)
  */
-export declare function cleanObject<T>(dirtyObject: object | Array<T>, allowMutations?: boolean): T;
+export declare function cleanObject<T>(dirtyObject: T, allowMutations?: boolean): T;
 /**
  * @param { string } str String with numbers separated by comma
  * @returns { number[] } Array of numbers
@@ -45,4 +46,3 @@ export declare function persistentFetch(url: RequestInfo | URL, numberOfTries: n
 export declare function simpleIDB(name: string, key: string, payload?: any): Promise<unknown>;
 type Locations = keyof Manifest;
 export declare function fetchBungieManifest(locations: Locations[], language?: string): Promise<Manifest>;
-export {};
