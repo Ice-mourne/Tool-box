@@ -1,5 +1,5 @@
 import _ from 'lodash'
-import { Manifest, InventoryItems, PlugSets, SocketTypes, Stats } from './bungieInterfaces/manifest'
+import { Manifest, InventoryItems, PlugSets, SocketTypes, Stats, Bungie, Language } from './bungieInterfaces/manifest'
 export { Manifest, InventoryItems, PlugSets, SocketTypes, Stats }
 
 /**
@@ -91,13 +91,15 @@ export function customJsonStringify(object: object, properties: StingilyProperti
 export async function persistentFetch(
    url: RequestInfo | URL,
    numberOfTries: number,
-   data: RequestInit | undefined = undefined,
-   r: number = 0
+   data: RequestInit | undefined = undefined
 ): Promise<any> {
-   const resp = await fetch(url, data)
-   if (resp.status === 200) return resp.json()
-   if (r >= numberOfTries) return
-   return persistentFetch(url, numberOfTries, data, r + 1)
+   try {
+      const resp = await fetch(url)
+      return resp.json()
+   } catch (error) {
+      if (numberOfTries === 0) return (error as Error).message
+      return persistentFetch(url, numberOfTries - 1, data)
+   }
 }
 
 /**
@@ -144,17 +146,17 @@ export async function simpleIDB(name: string, key: string, payload?: any) {
 
 type Locations = keyof Manifest
 
-export async function fetchBungieManifest(locations: Locations[], language: string = 'en') {
-   const json = await persistentFetch('https://www.bungie.net/Platform/Destiny2/Manifest/', 3)
+export async function fetchBungieManifest(locations: Locations[], language: Language = 'en') {
+   const json: Bungie = await persistentFetch('https://www.bungie.net/Platform/Destiny2/Manifest/', 3)
    const manifest = json.Response.jsonWorldComponentContentPaths[language]
    const manifestVersion = json.Response.version
 
    let data: Manifest = {
-      version: manifestVersion,
+      version: manifestVersion
    }
 
    for (let i = 0; i < locations.length; i++) {
-      const location = locations[i];
+      const location = locations[i]
       const fixedLocation = `Destiny${_.upperFirst(location)}Definition` as Locations
       data[location] = await persistentFetch(`https://www.bungie.net${manifest[fixedLocation]}`, 3)
    }

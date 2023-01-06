@@ -95,13 +95,16 @@ exports.customJsonStringify = customJsonStringify;
  * @param { RequestInit } data Data to send
  * @returns { Promise<any> } Fetched data in JSON format
  */
-async function persistentFetch(url, numberOfTries, data = undefined, r = 0) {
-    const resp = await fetch(url, data);
-    if (resp.status === 200)
+async function persistentFetch(url, numberOfTries, data = undefined) {
+    try {
+        const resp = await fetch(url);
         return resp.json();
-    if (r >= numberOfTries)
-        return;
-    return persistentFetch(url, numberOfTries, data, r + 1);
+    }
+    catch (error) {
+        if (numberOfTries === 0)
+            return error.message;
+        return persistentFetch(url, numberOfTries - 1, data);
+    }
 }
 exports.persistentFetch = persistentFetch;
 /**
@@ -148,7 +151,7 @@ async function fetchBungieManifest(locations, language = 'en') {
     const manifest = json.Response.jsonWorldComponentContentPaths[language];
     const manifestVersion = json.Response.version;
     let data = {
-        version: manifestVersion,
+        version: manifestVersion
     };
     for (let i = 0; i < locations.length; i++) {
         const location = locations[i];

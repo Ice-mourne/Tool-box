@@ -1,4 +1,4 @@
-import { Manifest, InventoryItems, PlugSets, SocketTypes, Stats } from './bungieInterfaces/manifest';
+import { Manifest, InventoryItems, PlugSets, SocketTypes, Stats, Language } from './bungieInterfaces/manifest';
 export { Manifest, InventoryItems, PlugSets, SocketTypes, Stats };
 /**
  ** Removes null, undefined, NaN, empty (objects, arrays, maps and or sets) from object or array
@@ -37,7 +37,7 @@ export declare function customJsonStringify(object: object, properties: Stingily
  * @param { RequestInit } data Data to send
  * @returns { Promise<any> } Fetched data in JSON format
  */
-export declare function persistentFetch(url: RequestInfo | URL, numberOfTries: number, data?: RequestInit | undefined, r?: number): Promise<any>;
+export declare function persistentFetch(url: RequestInfo | URL, numberOfTries: number, data?: RequestInit | undefined): Promise<any>;
 /**
  * @param { string } name Name of the database
  * @param { string } key Key to store data under
@@ -46,4 +46,4 @@ export declare function persistentFetch(url: RequestInfo | URL, numberOfTries: n
  */
 export declare function simpleIDB(name: string, key: string, payload?: any): Promise<unknown>;
 type Locations = keyof Manifest;
-export declare function fetchBungieManifest(locations: Locations[], language?: string): Promise<Manifest>;
+export declare function fetchBungieManifest(locations: Locations[], language?: Language): Promise<Manifest>;
