@@ -1,4 +1,4 @@
-import { Manifest, InventoryItems, PlugSets, SocketTypes, Stats, Language } from './bungieInterfaces/manifest';
+import { InventoryItems, Language, Manifest, PlugSets, SocketTypes, Stats } from './bungieInterfaces/manifest';
 export type { Manifest, InventoryItems, PlugSets, SocketTypes, Stats };
 /**
  ** Removes null, undefined, NaN, empty (objects, arrays, maps and or sets) from object or array
