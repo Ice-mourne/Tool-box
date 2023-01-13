@@ -156,7 +156,7 @@ async function fetchBungieManifest(locations, language = 'en') {
     for (let i = 0; i < locations.length; i++) {
         const location = locations[i];
         const fixedLocation = `Destiny${lodash_1.default.upperFirst(location)}Definition`;
-        data[location] = await persistentFetch(`https://www.bungie.net${manifest[fixedLocation]}`, 3);
+        data[location] = await persistentFetch(`https://www.bungie.net${manifest[fixedLocation]}?corsFix`, 3);
     }
     return data;
 }
