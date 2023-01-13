@@ -160,7 +160,7 @@ export async function fetchBungieManifest(locations: Locations[], language: Lang
    for (let i = 0; i < locations.length; i++) {
       const location = locations[i]
       const fixedLocation = `Destiny${_.upperFirst(location)}Definition` as Locations
-      data[location] = await persistentFetch(`https://www.bungie.net${manifest[fixedLocation]}`, 3)
+      data[location] = await persistentFetch(`https://www.bungie.net${manifest[fixedLocation]}?corsFix`, 3)
    }
 
    return data
