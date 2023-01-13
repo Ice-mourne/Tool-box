@@ -150,14 +150,11 @@ async function fetchBungieManifest(locations, language = 'en') {
     const json = await persistentFetch('https://www.bungie.net/Platform/Destiny2/Manifest/', 3);
     const manifest = json.Response.jsonWorldComponentContentPaths[language];
     const manifestVersion = json.Response.version;
-    let data = {
-        version: manifestVersion
-    };
-    for (let i = 0; i < locations.length; i++) {
-        const location = locations[i];
+    const data = await Promise.all(locations.map(async (location) => {
         const fixedLocation = `Destiny${lodash_1.default.upperFirst(location)}Definition`;
-        data[location] = await persistentFetch(`https://www.bungie.net${manifest[fixedLocation]}?corsFix`, 3);
-    }
-    return data;
+        const response = persistentFetch(`https://www.bungie.net${manifest[fixedLocation]}?corsFix`, 3);
+        return { [location]: response };
+    }));
+    return data.reduce((acc, curr) => ({ ...acc, ...curr }), { version: manifestVersion });
 }
 exports.fetchBungieManifest = fetchBungieManifest;

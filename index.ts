@@ -153,15 +153,13 @@ export async function fetchBungieManifest(locations: Locations[], language: Lang
    const manifest = json.Response.jsonWorldComponentContentPaths[language]
    const manifestVersion = json.Response.version
 
-   let data: Manifest = {
-      version: manifestVersion
-   }
+   const data = await Promise.all(
+      locations.map(async (location) => {
+         const fixedLocation = `Destiny${_.upperFirst(location)}Definition` as Locations
+         const response = persistentFetch(`https://www.bungie.net${manifest[fixedLocation]}?corsFix`, 3)
+         return { [location]: response }
+      })
+   )
 
-   for (let i = 0; i < locations.length; i++) {
-      const location = locations[i]
-      const fixedLocation = `Destiny${_.upperFirst(location)}Definition` as Locations
-      data[location] = await persistentFetch(`https://www.bungie.net${manifest[fixedLocation]}?corsFix`, 3)
-   }
-
-   return data
+   return data.reduce((acc, curr) => ({ ...acc, ...curr }), { version: manifestVersion }) as Manifest
 }
