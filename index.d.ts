@@ -47,3 +47,10 @@ export declare function persistentFetch(url: RequestInfo | URL, numberOfTries: n
 export declare function simpleIDB(name: string, key: string, payload?: any): Promise<unknown>;
 type Locations = keyof Manifest;
 export declare function fetchBungieManifest(locations: Locations[], language?: Language): Promise<Manifest>;
+type Entries<T> = {
+    [K in keyof T]: [K, T[K]];
+}[keyof T][];
+export declare class TypedObject {
+    static entries<T extends object>(obj: T): Entries<T>;
+    static keys<T extends object>(obj: T): (keyof T)[];
+}

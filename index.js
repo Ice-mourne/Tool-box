@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.fetchBungieManifest = exports.simpleIDB = exports.persistentFetch = exports.customJsonStringify = exports.numArrToString = exports.numStringToArr = exports.cleanObject = void 0;
+exports.TypedObject = exports.fetchBungieManifest = exports.simpleIDB = exports.persistentFetch = exports.customJsonStringify = exports.numArrToString = exports.numStringToArr = exports.cleanObject = void 0;
 const lodash_1 = __importDefault(require("lodash"));
 /**
  ** Removes null, undefined, NaN, empty (objects, arrays, maps and or sets) from object or array
@@ -152,9 +152,18 @@ async function fetchBungieManifest(locations, language = 'en') {
     const manifestVersion = json.Response.version;
     const data = await Promise.all(locations.map(async (location) => {
         const fixedLocation = `Destiny${lodash_1.default.upperFirst(location)}Definition`;
-        const response = persistentFetch(`https://www.bungie.net${manifest[fixedLocation]}?corsFix`, 3);
+        const response = await persistentFetch(`https://www.bungie.net${manifest[fixedLocation]}?corsFix`, 3);
         return { [location]: response };
     }));
     return data.reduce((acc, curr) => ({ ...acc, ...curr }), { version: manifestVersion });
 }
 exports.fetchBungieManifest = fetchBungieManifest;
+class TypedObject {
+    static entries(obj) {
+        return Object.entries(obj);
+    }
+    static keys(obj) {
+        return Object.keys(obj);
+    }
+}
+exports.TypedObject = TypedObject;
