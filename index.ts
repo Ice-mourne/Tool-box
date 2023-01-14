@@ -156,10 +156,23 @@ export async function fetchBungieManifest(locations: Locations[], language: Lang
    const data = await Promise.all(
       locations.map(async (location) => {
          const fixedLocation = `Destiny${_.upperFirst(location)}Definition` as Locations
-         const response = persistentFetch(`https://www.bungie.net${manifest[fixedLocation]}?corsFix`, 3)
+         const response = await persistentFetch(`https://www.bungie.net${manifest[fixedLocation]}?corsFix`, 3)
          return { [location]: response }
       })
    )
 
    return data.reduce((acc, curr) => ({ ...acc, ...curr }), { version: manifestVersion }) as Manifest
+}
+
+type Entries<T> = {
+   [K in keyof T]: [K, T[K]]
+}[keyof T][]
+
+export class TypedObject {
+   static entries<T extends object>(obj: T) {
+      return Object.entries(obj) as Entries<T>
+   }
+   static keys<T extends object>(obj: T) {
+      return Object.keys(obj) as (keyof T)[]
+   }
 }
