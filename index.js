@@ -97,7 +97,7 @@ exports.customJsonStringify = customJsonStringify;
  */
 async function persistentFetch(url, numberOfTries, data = undefined) {
     try {
-        const resp = await fetch(url);
+        const resp = await fetch(url, data);
         return resp.json();
     }
     catch (error) {

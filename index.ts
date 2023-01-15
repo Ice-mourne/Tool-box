@@ -96,7 +96,7 @@ export async function persistentFetch(
    data: RequestInit | undefined = undefined
 ): Promise<any> {
    try {
-      const resp = await fetch(url)
+      const resp = await fetch(url, data)
       return resp.json()
    } catch (error) {
       if (numberOfTries === 0) return (error as Error).message
