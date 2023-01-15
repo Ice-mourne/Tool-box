@@ -13,7 +13,7 @@ const lodash_1 = __importDefault(require("lodash"));
  * @returns { T } Same object or array without null, undefined, NaN, empty (objects, arrays, maps and or sets)
  */
 function cleanObject(dirtyObject, allowMutations = false) {
-    const obj = allowMutations ? lodash_1.default.cloneDeep(dirtyObject) : dirtyObject;
+    const obj = allowMutations ? dirtyObject : lodash_1.default.cloneDeep(dirtyObject);
     const remover = (obj) => {
         for (const key in obj) {
             // Remove null, undefined, NaN from array

@@ -12,7 +12,7 @@ export type { Manifest, InventoryItems, PlugSets, SocketTypes, Stats }
  * @returns { T } Same object or array without null, undefined, NaN, empty (objects, arrays, maps and or sets)
  */
 export function cleanObject<T>(dirtyObject: T, allowMutations: boolean = false): T {
-   const obj = allowMutations ? _.cloneDeep(dirtyObject) : dirtyObject
+   const obj = allowMutations ? dirtyObject : _.cloneDeep(dirtyObject)
    const remover = (obj: any) => {
       for (const key in obj) {
          // Remove null, undefined, NaN from array
