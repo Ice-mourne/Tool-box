@@ -57,7 +57,7 @@ export function numArrToString(array: number[] | undefined): string {
    return array.join(', ')
 }
 
-type StingilyProperties = 'stat' | 'multiplier' | 'weaponTypes' | 'classNames' | string
+type StringifyProperties = 'stat' | 'multiplier' | 'weaponTypes' | 'classNames'
 /**
  ** Instead of regular stringify this one doesn't add new lines to specified arrays
  ** Basically normal stringify would make
@@ -69,7 +69,7 @@ type StingilyProperties = 'stat' | 'multiplier' | 'weaponTypes' | 'classNames' |
  ** This will make
  ** [1, 2, 3]
  */
-export function customJsonStringify(object: object, properties: StingilyProperties[], spaces = 1) {
+export function customJsonStringify(object: object, properties: StringifyProperties[] | string[], spaces = 1) {
    const string = JSON.stringify(object, undefined, spaces)
    const regex = new RegExp(`"(${properties.join('|')})"\\s*:\\s*\\[([^]+?)\\]`, 'g')
 
@@ -89,6 +89,7 @@ export function customJsonStringify(object: object, properties: StingilyProperti
  * @param { number } numberOfTries Number of tries to fetch
  * @param { RequestInit } data Data to send
  * @returns { Promise<any> } Fetched data in JSON format
+ * @error { error } If error it will return object with error property
  */
 export async function persistentFetch(
    url: RequestInfo | URL,
@@ -99,7 +100,7 @@ export async function persistentFetch(
       const resp = await fetch(url, data)
       return resp.json()
    } catch (error) {
-      if (numberOfTries === 0) return (error as Error).message
+      if (numberOfTries === 0) return { error }
       return persistentFetch(url, numberOfTries - 1, data)
    }
 }

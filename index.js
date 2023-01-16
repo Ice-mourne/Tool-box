@@ -94,6 +94,7 @@ exports.customJsonStringify = customJsonStringify;
  * @param { number } numberOfTries Number of tries to fetch
  * @param { RequestInit } data Data to send
  * @returns { Promise<any> } Fetched data in JSON format
+ * @error { error } If error it will return object with error property
  */
 async function persistentFetch(url, numberOfTries, data = undefined) {
     try {
@@ -102,7 +103,7 @@ async function persistentFetch(url, numberOfTries, data = undefined) {
     }
     catch (error) {
         if (numberOfTries === 0)
-            return error.message;
+            return { error };
         return persistentFetch(url, numberOfTries - 1, data);
     }
 }
