@@ -1,0 +1,43 @@
+name: Build and Deploy to NPM
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout 🛎️
+        uses: actions/checkout@v3
+      - name: Use Node.js 18.x
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18.x
+
+      - name: Install 🔧
+        run: |
+          npm ci
+
+      - name: Build
+        run: |
+          npm run build
+
+      - name: Version up 🆙
+        run: |
+          git config --global user.email "cboweris@gmail.com"
+          git config --global user.name "Ice-mourne"
+          git add .
+          git commit -m "Version up"
+          npm version patch
+          git push
+
+      - name: Publish 📦
+        uses: JS-DevTools/npm-publish@v1
+        with:
+          token: ${{ secrets.NPM_TOKEN }}
+          tag: latest
+          access: public
+          dry-run: false
