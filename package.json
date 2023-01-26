@@ -3,7 +3,7 @@
   "author": "Icemourne",
   "license": "MIT",
   "homepage": "https://github.com/Ice-mourne/Tool-box#readme",
-  "version": "1.0.24",
+  "version": "1.0.25",
   "description": "Random TS functions",
   "main": "index.js",
   "scripts": {
