@@ -109,10 +109,10 @@ async function persistentFetch(url, numberOfTries, data = undefined) {
 }
 exports.persistentFetch = persistentFetch;
 /**
- * @param { string } name Name of the database
- * @param { string } key Key to store data under
- * @param payload Data to store
- * @returns Stored data
+   * @param { string } key Key to store data
+   * @param { any } data Data to store
+   * @returns { Promise<void> } Promise that resolves when data is stored
+   * @error { error } If error it will return object with error property
  */
 class SimpleIndexedDB {
     dbName;
