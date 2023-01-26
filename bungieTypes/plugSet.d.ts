@@ -1,4 +1,4 @@
-export interface PlugSet {
+export type PlugSet = {
    reusablePlugItems: ReusablePlugItem[]
    isFakePlugSet: boolean
    hash: number
@@ -8,13 +8,13 @@ export interface PlugSet {
    displayProperties?: DisplayProperties
 }
 
-export interface DisplayProperties {
+export type DisplayProperties = {
    description: string
    name: string
    hasIcon: boolean
 }
 
-export interface ReusablePlugItem {
+export type ReusablePlugItem = {
    weight: number
    alternateWeight: number
    currentlyCanRoll: boolean
@@ -22,12 +22,12 @@ export interface ReusablePlugItem {
    craftingRequirements?: CraftingRequirements
 }
 
-export interface CraftingRequirements {
+export type CraftingRequirements = {
    unlockRequirements: UnlockRequirement[]
    materialRequirementHashes: number[]
    requiredLevel?: number
 }
 
-export interface UnlockRequirement {
+export type UnlockRequirement = {
    failureDescription: string
 }

@@ -1,4 +1,4 @@
-export interface Stat {
+export type Stat = {
    displayProperties: DisplayProperties
    aggregationType: number
    hasComputedBlock: boolean
@@ -10,7 +10,7 @@ export interface Stat {
    blacklisted: boolean
 }
 
-export interface DisplayProperties {
+export type DisplayProperties = {
    description: string
    name: string
    icon?: string
@@ -18,6 +18,6 @@ export interface DisplayProperties {
    hasIcon: boolean
 }
 
-export interface IconSequence {
+export type IconSequence = {
    frames: string[]
 }

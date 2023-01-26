@@ -1,4 +1,4 @@
-import { Bungie, InventoryItems, Language, Manifest, PlugSets, SocketTypes, Stats } from './bungieInterfaces/manifest'
+import { Bungie, InventoryItems, Language, Manifest, PlugSets, SocketTypes, Stats } from './bungieTypes/manifest'
 
 import _ from 'lodash'
 
@@ -111,58 +111,107 @@ export async function persistentFetch(
  * @param payload Data to store
  * @returns Stored data
  */
-export async function simpleIDB(name: string, key: string, payload?: any) {
-   return await new Promise((resolve) => {
-      const request = window.indexedDB.open(`${name}_db`)
+export class SimpleIndexedDB {
+   private dbName: string
+   private storeName: string
 
-      request.onerror = (e) => {
-         console.error('IDB error')
-         console.error(e)
-      }
+   constructor(dbName: string, storeName: string) {
+      this.dbName = dbName
+      this.storeName = storeName
+   }
+
+   async set(key: any, data: any) {
+      const request = window.indexedDB.open(this.dbName)
 
       request.onupgradeneeded = () => {
          const db = request.result
-         db.createObjectStore(`${name}_store`)
+         db.createObjectStore(this.storeName)
       }
 
-      if (payload) {
-         request.onsuccess = () => {
-            const db = request.result
-            const transaction = db.transaction(`${name}_store`, 'readwrite')
-            const store = transaction.objectStore(`${name}_store`)
-            store.put(payload, key)
-         }
-      } else {
-         request.onsuccess = () => {
-            const db = request.result
-            const transaction = db.transaction(`${name}_store`, 'readwrite')
-            const store = transaction.objectStore(`${name}_store`)
-            const data = store.get(key)
+      request.onsuccess = () => {
+         const db = request.result
+         const transaction = db.transaction([this.storeName], 'readwrite')
+         const store = transaction.objectStore(this.storeName)
+         store.put(data, key)
+      }
+   }
 
+   async get(key: any) {
+      return new Promise((resolve) => {
+         const request = window.indexedDB.open(this.dbName)
+         let data: any
+
+         request.onupgradeneeded = () => {
+            const db = request.result
+            db.createObjectStore(this.storeName)
+         }
+
+         request.onsuccess = async () => {
+            const db = request.result
+            const transaction = db.transaction([this.storeName], 'readonly')
+            const store = transaction.objectStore(this.storeName)
+            data = store.get(key)
             data.onsuccess = () => {
                resolve(data.result)
             }
          }
-      }
-   })
-}
+      })
+   }
 
+   async delete() {
+      const request = window.indexedDB.open(this.dbName)
+
+      request.onsuccess = () => {
+         const db = request.result
+         db.deleteObjectStore(this.storeName)
+      }
+   }
+}
 type Locations = keyof Manifest
 
-export async function fetchBungieManifest(locations: Locations[], language: Language = 'en') {
+export async function fetchBungieManifest(
+   locations: Locations[],
+   language: Language = 'en',
+   useIndexedDB: boolean = false
+) {
    const json: Bungie = await persistentFetch('https://www.bungie.net/Platform/Destiny2/Manifest/', 3)
    const manifest = json.Response.jsonWorldComponentContentPaths[language]
    const manifestVersion = json.Response.version
 
-   const data = await Promise.all(
-      locations.map(async (location) => {
-         const fixedLocation = `Destiny${_.upperFirst(location)}Definition` as Locations
-         const response = await persistentFetch(`https://www.bungie.net${manifest[fixedLocation]}?corsFix`, 3)
-         return { [location]: response }
-      })
-   )
+   let bongoData = {} as { [key in Locations]: Promise<any> }
 
-   return data.reduce((acc, curr) => ({ ...acc, ...curr }), { version: manifestVersion }) as Manifest
+   const fetchBongo = async (location: Locations) => {
+      const fixedLocation = `Destiny${_.upperFirst(location)}Definition` as Locations
+      return persistentFetch(`https://www.bungie.net${manifest[fixedLocation]}?corsFix`, 3)
+   }
+
+   if (useIndexedDB) {
+      const db = new SimpleIndexedDB('bungie', 'manifest')
+      const cachedVersion = await db.get('version')
+
+      if (cachedVersion === manifestVersion) db.delete()
+
+      locations.forEach(async (location) => {
+         const dbResponse = db.get(`${location}-${language}`)
+         if (dbResponse) {
+            bongoData[location] = dbResponse
+            return
+         }
+         const response = fetchBongo(location)
+         db.set(`${location}-${language}`, await response)
+         bongoData[location] = response
+      })
+   } else {
+      locations.forEach((location) => {
+         const response = fetchBongo(location)
+         bongoData[location] = response
+      })
+   }
+
+   return Object.entries(bongoData).reduce(async (acc, [key, value]) => {
+      acc[key] = await value
+      return acc
+   }, {} as any) as Manifest
 }
 
 type Entries<T> = {

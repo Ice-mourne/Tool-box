@@ -1,4 +1,4 @@
-export interface SocketType {
+export type SocketType = {
    displayProperties: DisplayProperties
    insertAction: InsertAction
    plugWhitelist: PlugWhitelist[]
@@ -16,25 +16,25 @@ export interface SocketType {
    blacklisted: boolean
 }
 
-export interface CurrencyScalar {
+export type CurrencyScalar = {
    currencyItemHash: number
    scalarValue: number
 }
 
-export interface DisplayProperties {
+export type DisplayProperties = {
    description: string
    name: string
    hasIcon: boolean
 }
 
-export interface InsertAction {
+export type InsertAction = {
    actionExecuteSeconds: number
    actionSoundHash: number
    isPositiveAction: boolean
    actionType: number
 }
 
-export interface PlugWhitelist {
+export type PlugWhitelist = {
    categoryHash: number
    categoryIdentifier: string
    reinitializationPossiblePlugHashes?: number[]

@@ -3,23 +3,23 @@ import { PlugSet } from './plugSet'
 import { SocketType } from './socketType'
 import { Stat } from './stat'
 
-export interface InventoryItems {
+export type InventoryItems = {
    [key: string]: InventoryItem
 }
 
-export interface PlugSets {
+export type PlugSets = {
    [key: string]: PlugSet
 }
 
-export interface SocketTypes {
+export type SocketTypes = {
    [key: string]: SocketType
 }
 
-export interface Stats {
+export type Stats = {
    [key: string]: Stat
 }
 
-export interface Manifest {
+export type Manifest = {
    version: string
    inventoryItem?: InventoryItems
    plugSet?: PlugSets
@@ -27,7 +27,7 @@ export interface Manifest {
    stat?: Stats
 }
 
-export interface Bungie {
+export type Bungie = {
    Response: {
       version: string
       jsonWorldComponentContentPaths: {

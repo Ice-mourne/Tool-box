@@ -1,4 +1,4 @@
-export interface InventoryItem {
+export type InventoryItem = {
    displayProperties: DisplayProperties
    tooltipNotifications?: TooltipNotification[]
    itemTypeDisplayName?: string
@@ -66,7 +66,7 @@ export interface InventoryItem {
    links?: any[]
 }
 
-export interface Action {
+export type Action = {
    verbName: string
    verbDescription: string
    isPositive: boolean
@@ -83,19 +83,19 @@ export interface Action {
    useOnAcquire: boolean
 }
 
-export interface ProgressionReward {
+export type ProgressionReward = {
    progressionMappingHash: number
    amount: number
    applyThrottles: boolean
 }
 
-export interface RequiredItem {
+export type RequiredItem = {
    count: number
    itemHash: number
    deleteOnAction: boolean
 }
 
-export interface BackgroundColor {
+export type BackgroundColor = {
    colorHash: number
    red: number
    green: number
@@ -103,19 +103,19 @@ export interface BackgroundColor {
    alpha: number
 }
 
-export interface Crafting {
+export type Crafting = {
    outputItemHash: number
    requiredSocketTypeHashes: number[]
    failedRequirementStrings: string[]
    bonusPlugs: BonusPlug[]
 }
 
-export interface BonusPlug {
+export type BonusPlug = {
    socketTypeHash: number
    plugItemHash: number
 }
 
-export interface DisplayProperties {
+export type DisplayProperties = {
    description: string
    name: string
    hasIcon: boolean
@@ -124,11 +124,11 @@ export interface DisplayProperties {
    highResIcon?: string
 }
 
-export interface IconSequence {
+export type IconSequence = {
    frames: string[]
 }
 
-export interface EquippingBlock {
+export type EquippingBlock = {
    uniqueLabelHash: number
    equipmentSlotTypeHash: number
    attributes: number
@@ -139,12 +139,12 @@ export interface EquippingBlock {
    uniqueLabel?: string
 }
 
-export interface Gearset {
+export type Gearset = {
    trackingValueMax: number
    itemList: number[]
 }
 
-export interface Inventory {
+export type Inventory = {
    maxStackSize: number
    bucketTypeHash: number
    recoveryBucketTypeHash: number
@@ -161,17 +161,17 @@ export interface Inventory {
    recipeItemHash?: number
 }
 
-export interface InvestmentStat {
+export type InvestmentStat = {
    statTypeHash: number
    value: number
    isConditionallyActive: boolean
 }
 
-export interface Metrics {
+export type Metrics = {
    availableMetricCategoryNodeHashes: number[]
 }
 
-export interface Objectives {
+export type Objectives = {
    objectiveHashes: number[]
    displayActivityHashes: number[]
    requireFullObjectiveCompletion: boolean
@@ -190,18 +190,18 @@ export interface Objectives {
    displayAsStatTracker: boolean
 }
 
-export interface PerObjectiveDisplayProperty {
+export type PerObjectiveDisplayProperty = {
    displayOnItemPreviewScreen: boolean
    activityHash?: number
 }
 
-export interface Perk {
+export type Perk = {
    requirementDisplayString: string
    perkHash: number
    perkVisibility: number
 }
 
-export interface Plug {
+export type Plug = {
    insertionRules: Rule[]
    plugCategoryIdentifier: string
    plugCategoryHash: number
@@ -223,23 +223,23 @@ export interface Plug {
    energyCapacity?: EnergyCapacity
 }
 
-export interface Rule {
+export type Rule = {
    failureMessage: string
 }
 
-export interface EnergyCapacity {
+export type EnergyCapacity = {
    capacityValue: number
    energyTypeHash: number
    energyType: number
 }
 
-export interface EnergyCost {
+export type EnergyCost = {
    energyCost: number
    energyTypeHash: number
    energyType: number
 }
 
-export interface Preview {
+export type Preview = {
    screenStyle: string
    previewVendorHash: number
    previewActionString: string
@@ -247,18 +247,18 @@ export interface Preview {
    artifactHash?: number
 }
 
-export interface DerivedItemCategory {
+export type DerivedItemCategory = {
    categoryDescription: string
    items: Item[]
    categoryIndex: number
 }
 
-export interface Item {
+export type Item = {
    itemHash: number
    vendorItemIndex: number
 }
 
-export interface Quality {
+export type Quality = {
    itemLevels: any[]
    qualityLevel: number
    infusionCategoryName: string
@@ -270,11 +270,11 @@ export interface Quality {
    displayVersionWatermarkIcons?: string[]
 }
 
-export interface Version {
+export type Version = {
    powerCapHash: number
 }
 
-export interface Sack {
+export type Sack = {
    detailAction: string
    openAction: string
    seedUnlockValueHash: number
@@ -287,7 +287,7 @@ export interface Sack {
    vendorSackType?: string
 }
 
-export interface SetData {
+export type SetData = {
    itemList: ItemList[]
    trackingUnlockValueHash: number
    abandonmentUnlockHash: number
@@ -299,30 +299,30 @@ export interface SetData {
    questStepSummary: string
 }
 
-export interface ItemList {
+export type ItemList = {
    trackingValue: number
    itemHash: number
 }
 
-export interface Sockets {
+export type Sockets = {
    detail: string
    socketEntries: SocketEntry[]
    intrinsicSockets: IntrinsicSocket[]
    socketCategories: SocketCategory[]
 }
 
-export interface IntrinsicSocket {
+export type IntrinsicSocket = {
    plugItemHash: number
    socketTypeHash: number
    defaultVisible: boolean
 }
 
-export interface SocketCategory {
+export type SocketCategory = {
    socketCategoryHash: number
    socketIndexes: number[]
 }
 
-export interface SocketEntry {
+export type SocketEntry = {
    socketTypeHash: number
    singleInitialItemHash: number
    reusablePlugItems: ReusablePlugItem[]
@@ -336,11 +336,11 @@ export interface SocketEntry {
    randomizedPlugSetHash?: number
 }
 
-export interface ReusablePlugItem {
+export type ReusablePlugItem = {
    plugItemHash: number
 }
 
-export interface Stats {
+export type Stats = {
    disablePrimaryStatDisplay: boolean
    statGroupHash?: number
    stats: { [key: string]: Stat }
@@ -348,7 +348,7 @@ export interface Stats {
    primaryBaseStatHash: number
 }
 
-export interface Stat {
+export type Stat = {
    statHash: number
    value: number
    minimum: number
@@ -356,11 +356,11 @@ export interface Stat {
    displayMaximum?: number
 }
 
-export interface Summary {
+export type Summary = {
    sortPriority: number
 }
 
-export interface TalentGrid {
+export type TalentGrid = {
    talentGridHash: number
    itemDetailString: string
    hudDamageType: number
@@ -368,12 +368,12 @@ export interface TalentGrid {
    hudIcon?: string
 }
 
-export interface TooltipNotification {
+export type TooltipNotification = {
    displayString: string
    displayStyle: string
 }
 
-export interface TranslationBlock {
+export type TranslationBlock = {
    weaponPatternHash: number
    defaultDyes: Dye[]
    lockedDyes: Dye[]
@@ -382,22 +382,22 @@ export interface TranslationBlock {
    hasGeometry: boolean
 }
 
-export interface Arrangement {
+export type Arrangement = {
    classHash: number
    artArrangementHash: number
 }
 
-export interface Dye {
+export type Dye = {
    channelHash: number
    dyeHash: number
 }
 
-export interface Value {
+export type Value = {
    itemValue: ItemValue[]
    valueDescription: string
 }
 
-export interface ItemValue {
+export type ItemValue = {
    itemHash: number
    quantity: number
    hasConditionalVisibility: boolean
