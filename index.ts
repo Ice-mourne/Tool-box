@@ -111,7 +111,7 @@ export async function persistentFetch(
    * @returns { Promise<void> } Promise that resolves when data is stored
    * @error { error } If error it will return object with error property
  */
-export class SimpleIndexedDB {
+ export class SimpleIndexedDB {
    private dbName: string
    private storeName: string
 
@@ -178,7 +178,7 @@ export async function fetchBungieManifest(
    const manifest = json.Response.jsonWorldComponentContentPaths[language]
    const manifestVersion = json.Response.version
 
-   let bongoData = {} as { [key in Locations]: Promise<any> }
+   let bongoData = {} as { [key in Locations]: any }
 
    const fetchBongo = async (location: Locations) => {
       const fixedLocation = `Destiny${_.upperFirst(location)}Definition` as Locations
@@ -189,10 +189,10 @@ export async function fetchBungieManifest(
       const db = new SimpleIndexedDB('bungie', 'manifest')
       const cachedVersion = await db.get('version')
 
-      if (cachedVersion === manifestVersion) db.delete()
+      if (cachedVersion && cachedVersion !== manifestVersion) db.delete()
 
       locations.forEach(async (location) => {
-         const dbResponse = db.get(`${location}-${language}`)
+         const dbResponse = await db.get(`${location}-${language}`)
          if (dbResponse) {
             bongoData[location] = dbResponse
             return
@@ -201,6 +201,8 @@ export async function fetchBungieManifest(
          db.set(`${location}-${language}`, await response)
          bongoData[location] = response
       })
+      db.set('version', manifestVersion)
+      bongoData.version = manifestVersion
    } else {
       locations.forEach((location) => {
          const response = fetchBongo(location)
