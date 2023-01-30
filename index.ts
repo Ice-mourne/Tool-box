@@ -1,8 +1,9 @@
-import { Bungie, InventoryItems, Language, Manifest, PlugSets, SocketTypes, Stats } from './bungieTypes/manifest.js'
-
 import _ from 'lodash'
 
-export type { Manifest, InventoryItems, PlugSets, SocketTypes, Stats }
+import { InventoryItem } from './bungieTypes/inventoryItem.js'
+import { Bungie, InventoryItems, Language, Manifest, PlugSets, SocketTypes, Stats } from './bungieTypes/manifest.js'
+
+export type { Manifest, InventoryItems, InventoryItem, PlugSets, SocketTypes, Stats }
 
 /**
  ** Removes null, undefined, NaN, empty (objects, arrays, maps and or sets) from object or array
