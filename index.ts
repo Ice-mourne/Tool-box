@@ -1,9 +1,9 @@
 import _ from 'lodash'
 
-import { InventoryItem } from './bungieTypes/inventoryItem.js'
+import { InventoryItem, SocketEntry } from './bungieTypes/inventoryItem.js'
 import { Bungie, InventoryItems, Language, Manifest, PlugSets, SocketTypes, Stats } from './bungieTypes/manifest.js'
 
-export type { Manifest, InventoryItems, InventoryItem, PlugSets, SocketTypes, Stats }
+export type { Manifest, InventoryItems, InventoryItem, PlugSets, SocketTypes, SocketEntry, Stats }
 
 /**
  ** Removes null, undefined, NaN, empty (objects, arrays, maps and or sets) from object or array
@@ -107,12 +107,12 @@ export async function persistentFetch(
 }
 
 /**
-   * @param { string } key Key to store data
-   * @param { any } data Data to store
-   * @returns { Promise<void> } Promise that resolves when data is stored
-   * @error { error } If error it will return object with error property
+ * @param { string } key Key to store data
+ * @param { any } data Data to store
+ * @returns { Promise<void> } Promise that resolves when data is stored
+ * @error { error } If error it will return object with error property
  */
- export class SimpleIndexedDB {
+export class SimpleIndexedDB {
    private dbName: string
    private storeName: string
 
