@@ -211,10 +211,9 @@ export async function fetchBungieManifest(
       })
    }
 
-   return Object.entries(bongoData).reduce(async (acc, [key, value]) => {
-      acc[key] = await value
-      return acc
-   }, {} as any) as Manifest
+   return await Object.entries(bongoData).reduce(async (acc, [key, value]) => {
+      return {...acc, [key]: await value}
+   }, Promise.resolve({}) as Promise<{[key: string]: any}>) as Manifest
 }
 
 type Entries<T> = {
