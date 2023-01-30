@@ -1,7 +1,7 @@
-import { InventoryItem } from './inventoryItem'
-import { PlugSet } from './plugSet'
-import { SocketType } from './socketType'
-import { Stat } from './stat'
+import { InventoryItem } from './inventoryItem.js'
+import { PlugSet } from './plugSet.js'
+import { SocketType } from './socketType.js'
+import { Stat } from './stat.js'
 
 export type InventoryItems = {
    [key: string]: InventoryItem
