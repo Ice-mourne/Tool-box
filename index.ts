@@ -1,4 +1,4 @@
-import { Bungie, InventoryItems, Language, Manifest, PlugSets, SocketTypes, Stats } from './bungieTypes/manifest'
+import { Bungie, InventoryItems, Language, Manifest, PlugSets, SocketTypes, Stats } from './bungieTypes/manifest.js'
 
 import _ from 'lodash'
 

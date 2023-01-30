@@ -4,3 +4,5 @@ node_modules
 .gitignore
 .prettierrc.yml
 tsconfig.json
+*.ts
+!*.d.ts

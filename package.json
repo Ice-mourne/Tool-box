@@ -6,8 +6,9 @@
   "version": "1.0.27",
   "description": "Random TS functions",
   "exports": {
-    ".": "./index.ts"
+    ".": "./index.js"
   },
+  "type": "module",
   "scripts": {
     "build": "tsc"
   },
