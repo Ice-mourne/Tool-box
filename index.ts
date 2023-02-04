@@ -179,7 +179,7 @@ export async function fetchBungieManifest(
    const manifest = json.Response.jsonWorldComponentContentPaths[language]
    const manifestVersion = json.Response.version
 
-   let bongoData = [] as [Locations, any][]
+   let bongoData = {} as { [key in Locations]: any }
 
    const fetchBongo = async (location: Locations) => {
       const fixedLocation = `Destiny${_.upperFirst(location)}Definition` as Locations
@@ -195,27 +195,30 @@ export async function fetchBungieManifest(
       locations.forEach(async (location) => {
          const dbResponse = await db.get(`${location}-${language}`)
          if (dbResponse) {
-            bongoData.push([location, dbResponse])
+            bongoData[location] = dbResponse
             return
          }
          const response = fetchBongo(location)
          db.set(`${location}-${language}`, await response)
-         bongoData.push([location, response])
+         bongoData[location] = response
       })
       db.set('version', manifestVersion)
-      bongoData.push(['version', manifestVersion])
+      bongoData.version = manifestVersion
    } else {
       locations.forEach((location) => {
          const response = fetchBongo(location)
-         bongoData.push([location, response])
+         bongoData[location] = response
       })
    }
 
-   return Object.fromEntries(await Promise.all(bongoData))
+   const newBongoData = {} as Manifest
 
-   // return await TypedObject.entries(bongoData).reduce(async (acc, [key, value]) => {
-   //    return { ...acc, [key]: await value }
-   // }, Promise.resolve({}) as Promise<{ [key in Locations]: Manifest[key] }>)
+   for (const k in bongoData) {
+      const key = k as Locations
+      newBongoData[key] = await bongoData[key]
+   }
+
+   return newBongoData
 }
 
 type Entries<T> = {
