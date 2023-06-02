@@ -1,8 +1,8 @@
 import _ from 'lodash'
 import { Bungie, Language, Manifest } from '../bungieTypes/manifest.js'
-import { SimpleIndexedDB } from '../classes/simpleIndexedDB.js'
 import { DeepReadonly } from '../types/deepReadonly.js'
 import { persistentFetch } from './persistentFetch.js'
+import { get, set } from 'idb-keyval'
 
 type Locations = keyof Manifest
 
@@ -23,23 +23,29 @@ export async function fetchBungieManifest<T extends keyof Manifest>(
   }
 
   if (useIndexedDB) {
-    const db = new SimpleIndexedDB('bungie', 'manifest')
-    const cachedVersion = await db.get('version')
+    const cachedVersion = await get<string>('version')
 
-    if (cachedVersion && cachedVersion !== manifestVersion) db.delete()
-
-    locations.forEach(async (location) => {
-      const dbResponse = await db.get(`${location}-${language}`)
-      if (dbResponse) {
-        bongoData[location] = dbResponse
-        return
-      }
-      const response = fetchBongo(location)
-      db.set(`${location}-${language}`, await response)
-      bongoData[location] = response
-    })
-    db.set('version', manifestVersion)
-    bongoData.version = manifestVersion
+    if (cachedVersion === undefined || cachedVersion !== manifestVersion) {
+      locations.forEach(async (location) => {
+        const response = fetchBongo(location)
+        set(`${location}-${language}`, await response)
+        bongoData[location] = response
+      })
+      set('version', manifestVersion)
+      bongoData.version = manifestVersion
+    } else {
+      locations.forEach(async (location) => {
+        const dbResponse = await get(`${location}-${language}`)
+        if (dbResponse) {
+          bongoData[location] = dbResponse
+          return
+        }
+        const response = fetchBongo(location)
+        set(`${location}-${language}`, await response)
+        bongoData[location] = response
+      })
+      bongoData.version = cachedVersion
+    }
   } else {
     locations.forEach((location) => {
       const response = fetchBongo(location)
