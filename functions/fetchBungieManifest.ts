@@ -1,8 +1,8 @@
+import { get, set } from 'idb-keyval'
 import _ from 'lodash'
 import { Bungie, Language, Manifest } from '../bungieTypes/manifest.js'
 import { DeepReadonly } from '../types/deepReadonly.js'
 import { persistentFetch } from './persistentFetch.js'
-import { get, set } from 'idb-keyval'
 
 type Locations = keyof Manifest
 

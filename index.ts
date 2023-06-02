@@ -1,7 +1,6 @@
 import { InventoryItem, SocketEntry } from './bungieTypes/inventoryItem.js'
 import { InventoryItems, Manifest, PlugSets, SocketTypes, Stats } from './bungieTypes/manifest.js'
 
-import { SimpleIndexedDB } from './classes/simpleIndexedDB.js'
 import { TypedObject } from './classes/typedObject.js'
 
 import { cleanObject } from './functions/cleanObject.js'
@@ -11,9 +10,9 @@ import { persistentFetch } from './functions/persistentFetch.js'
 
 import { DeepReadonly } from './types/deepReadonly.js'
 
-export { SimpleIndexedDB, TypedObject, cleanObject, customJsonStringify, fetchBungieManifest, persistentFetch }
+export { TypedObject, cleanObject, customJsonStringify, fetchBungieManifest, persistentFetch }
 
-export type { Manifest, InventoryItems, InventoryItem, PlugSets, SocketTypes, SocketEntry, Stats, DeepReadonly }
+export type { DeepReadonly, InventoryItem, InventoryItems, Manifest, PlugSets, SocketEntry, SocketTypes, Stats }
 
 /**
  * @param { string } str String with numbers separated by comma
