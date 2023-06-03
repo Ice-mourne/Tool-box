@@ -1,4 +1,4 @@
-import { isEmpty, isNil, pull } from 'lodash'
+import _ from 'lodash'
 
 /**
  ** Removes null, undefined, NaN, empty (objects, arrays, maps and or sets) from object or array
@@ -13,20 +13,20 @@ export function cleanObject<T>(dirtyObject: T, allowMutations: boolean = false):
     for (const key in obj) {
       // Remove null, undefined, NaN from array
       if (Array.isArray(obj[key])) {
-        obj[key] = pull(obj[key], undefined, null, NaN)
+        obj[key] = _.pull(obj[key], undefined, null, NaN)
       }
       // remove null undefined
-      if (isNil(obj[key])) delete obj[key]
+      if (_.isNil(obj[key])) delete obj[key]
       // Remove NaN values
       if (Number.isNaN(obj[key])) delete obj[key]
       // If values is not object continue
       if (!obj[key] || typeof obj[key] !== 'object') continue
       remover(obj[key])
       // Remove empty objects, arrays, maps and sets
-      if (isEmpty(obj[key])) delete obj[key]
+      if (_.isEmpty(obj[key])) delete obj[key]
     }
     // Deleting properties from array makes them undefined this will remove undefined values from array
-    if (Array.isArray(obj)) return pull(obj, undefined)
+    if (Array.isArray(obj)) return _.pull(obj, undefined)
     return obj
   }
   return remover(obj)
