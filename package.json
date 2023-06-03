@@ -19,11 +19,13 @@
   "bugs": {
     "url": "https://github.com/Ice-mourne/Tool-box/issues"
   },
+  "dependencies": {
+    "idb-keyval": "^6.2.1",
+    "lodash": "^4.17.21"
+  },
   "devDependencies": {
     "@types/lodash": "^4.14.195",
     "@types/node": "^18.16.16",
-    "idb-keyval": "^6.2.1",
-    "lodash": "^4.17.21",
     "typescript": "^5.1.3"
   }
 }
