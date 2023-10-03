@@ -7,6 +7,10 @@ export type InventoryItems = {
    [key: string]: InventoryItem
 }
 
+export type InventoryItemsLite = {
+   [key: string]: InventoryItemLite
+}
+
 export type PlugSets = {
    [key: string]: PlugSet
 }
@@ -22,6 +26,7 @@ export type Stats = {
 export type Manifest = {
    version: string
    inventoryItem?: InventoryItems
+   inventoryItemLite?: InventoryItemsLite
    plugSet?: PlugSets
    socketType?: SocketTypes
    stat?: Stats
