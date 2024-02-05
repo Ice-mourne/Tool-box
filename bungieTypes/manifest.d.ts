@@ -1,4 +1,5 @@
 import { InventoryItem } from './inventoryItem.js'
+import { InventoryItemLite } from './inventoryItemLite.js'
 import { PlugSet } from './plugSet.js'
 import { SocketType } from './socketType.js'
 import { Stat } from './stat.js'
